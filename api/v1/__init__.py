@@ -7,6 +7,7 @@ from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 
 from api.v1.models.mongo_db import mongodb
+from api.v1.templates.knowledge_base.pinecone_api import pincone_blueprint
 
 load_dotenv()
 
@@ -45,7 +46,7 @@ def create_app(test_config: Dict[str ,str] = None):
     JWTManager(app) 
     
     # Register Blueprints 
-    # app.register_blueprint(auth) 
+    app.register_blueprint(pincone_blueprint) 
 
 
     @app.route('/api/v1/home', methods=['GET'])
