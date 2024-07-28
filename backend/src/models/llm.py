@@ -25,13 +25,15 @@ class GroqLlm():
         
         self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-        system_prompt = conversation_agent_prompt()
+        system_prompt: str = conversation_agent_prompt()
         
-        self.prompt = ChatPromptTemplate.from_messages([
+        self.prompt = ChatPromptTemplate.from_messages(
+            [
             SystemMessagePromptTemplate.from_template(system_prompt),
             MessagesPlaceholder(variable_name="chat_history"),
             HumanMessagePromptTemplate.from_template("{text}")
-        ])
+            ]
+        )
 
         self.conversation = LLMChain(
             llm=self.groq,
