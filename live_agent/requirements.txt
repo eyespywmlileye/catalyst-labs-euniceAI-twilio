@@ -1,0 +1,7 @@
+Flask 
+flask-sock
+assemblyai
+python-dotenv
+ngrok
+twilio
+deepgram-sdk 

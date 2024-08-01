@@ -21,3 +21,5 @@ pyyaml
 pinecone-client
 python-docx
 PyPDF2
+twilio
+Flask-SocketIO

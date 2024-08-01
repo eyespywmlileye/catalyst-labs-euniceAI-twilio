@@ -7,7 +7,9 @@ from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 
 from api.v1.models.mongo_db import mongodb
+
 from api.v1.templates.knowledge_base.pinecone_api import pincone_blueprint
+from api.v1.templates.knowledge_base.object_store_api import aws_object_store
 
 load_dotenv()
 
@@ -47,6 +49,7 @@ def create_app(test_config: Dict[str ,str] = None):
     
     # Register Blueprints 
     app.register_blueprint(pincone_blueprint) 
+    app.register_blueprint(aws_object_store)
 
 
     @app.route('/api/v1/home', methods=['GET'])

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <button id="start">Start Transcription</button>
+    <div id="transcripts"></div>
+
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        const socket = io('http://127.0.0.1:5000');
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('transcript', (transcript) => {
+            const transcriptsDiv = document.getElementById('transcripts');
+            const p = document.createElement('p');
+            p.textContent = transcript;
+            transcriptsDiv.appendChild(p);
+        });
+
+        document.getElementById('start').addEventListener('click', () => {
+            socket.emit('start_transcription');
+        });
+    </script>
+</body>
+</html>
