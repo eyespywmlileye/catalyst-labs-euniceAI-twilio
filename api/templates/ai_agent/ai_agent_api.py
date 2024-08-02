@@ -21,7 +21,7 @@ mongodb_atlas = MongoDBAtlas()
 
 ai_agent = Blueprint(name='ai_agent',
                      import_name=__name__,
-                     url_prefix='api/v1/ai_agent')
+                     url_prefix='/api/v1/ai_agent')
 
 # Create a new instance of the Flask-Sock extension
 sock = Sock()

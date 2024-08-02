@@ -52,7 +52,7 @@ def init_twilio_ngrok(port: str)-> None:
         print(f"Error setting up Twilio Ngrok tunnel: {e}")
         return None
     
-    
+app = create_app()
 if __name__ == "__main__":
     
         
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         # Initialize Twilio integration with Ngrok tunneling
         init_twilio_ngrok(port = PORT)
         
-        app = create_app()
+        
         app.run(port = PORT,
                 debug=DEBUG)
         

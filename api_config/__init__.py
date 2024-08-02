@@ -1,6 +1,8 @@
 import os 
 from typing import Dict , List
 
+import ngrok 
+
 import assemblyai as aai
 
 from flask_cors import CORS
