@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_sock import Sock
 from flask import request, Response, Blueprint
 
+from api.models.websocket import sock
 from api.models.mongo_db import mongodb
 from api.config.mongodb_config import MongoDBAtlas
 
@@ -14,7 +15,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-INCOMING_CALL_ROUTE: str = '/'
+INCOMING_CALL_ROUTE = '/'
 WEBSOCKET_ROUTE: str = '/jeffrey_init'
 
 mongodb_atlas = MongoDBAtlas()
@@ -22,30 +23,11 @@ mongodb_atlas = MongoDBAtlas()
 ai_agent = Blueprint(name='ai_agent',
                      import_name=__name__,
                      url_prefix='/api/v1/ai_agent')
-
-# Create a new instance of the Flask-Sock extension
-sock = Sock()
-
-@ai_agent.route(INCOMING_CALL_ROUTE, methods=['GET', 'POST'])
-def receive_call():
-    if request.method == 'POST':
-        xml = f"""
-                <Response>
-                    <Say>
-                        Hi there! Welcome to Catalyst Labs, please wait 3 seconds while we connect to our AI agent.
-                    </Say>
-                    <Connect>
-                        <Stream url='wss://{request.host}{WEBSOCKET_ROUTE}' />
-                    </Connect>
-                </Response>
-                """.strip()
-
-        return Response(xml, mimetype='text/xml')
-    else:
-        return "Real-time phone call transcription app"
-
+ 
 @sock.route(WEBSOCKET_ROUTE)
 def transcription_websocket(ws):
+    
+ 
     transcriber = None
     while True:
         data = json.loads(ws.receive())
@@ -58,7 +40,8 @@ def transcription_websocket(ws):
                 mongodb.cx[mongodb_atlas.database_name][mongodb_atlas.state_manager_collection].update_one(
                     {'name': "state_manager"},
                     {'$set': {'state': 'connected',
-                              "dateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}}
+                              "dateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}},
+                    upsert=True
                 )
                 print('transcriber connected')
 

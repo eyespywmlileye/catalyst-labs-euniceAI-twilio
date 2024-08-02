@@ -1,4 +1,6 @@
 import os 
+import sqlite3
+import pytz
 
 import ngrok 
 from twilio.rest import Client
@@ -52,6 +54,35 @@ def init_twilio_ngrok(port: str)-> None:
         print(f"Error setting up Twilio Ngrok tunnel: {e}")
         return None
     
+def init_sqlite_db(): 
+
+    # Connect to the database (or create it if it doesn't exist)
+    connection = sqlite3.connect('business_bookings.db')
+
+    # Create a cursor object
+    cursor = connection.cursor()
+
+    # Create the bookings table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS bookings (
+            booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            surname TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone_number TEXT NOT NULL,
+            service_name TEXT NOT NULL,
+            booking_date TIMESTAMP NOT NULL,
+            confirmed BOOLEAN DEFAULT FALSE,
+            date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
+    # Commit the changes and close the connection
+    connection.commit()
+    connection.close()
+
+    print("Bookings table created successfully.")
+    
 app = create_app()
 if __name__ == "__main__":
     
@@ -62,6 +93,9 @@ if __name__ == "__main__":
     try:    
         # Initialize Twilio integration with Ngrok tunneling
         init_twilio_ngrok(port = PORT)
+        
+        # Initialise SQL Lite 
+        init_sqlite_db()
         
         
         app.run(port = PORT,

@@ -5,9 +5,11 @@ import ngrok
 
 import assemblyai as aai
 
-from flask_cors import CORS
-from flask import Flask, jsonify 
 
+from flask_cors import CORS
+from flask import Flask, jsonify , request, Response
+
+from api.models.websocket import sock
 from api.models.mongo_db import mongodb
 
 from api.templates.ai_agent.ai_agent_api import ai_agent
@@ -29,7 +31,6 @@ def create_app(test_config: Dict[str ,str] = None) -> Flask:
         
     # Add CORS origin to restrict access to the API to only the allowed origins
     CORS(app , resources={r'/api/*': {"origins": allowed_orgins}})
-
 
     if test_config is None: 
         
@@ -54,11 +55,34 @@ def create_app(test_config: Dict[str ,str] = None) -> Flask:
     mongodb.app = app # set the app instance for the PyMongo DB ( we imported is from our mongodb from src/models/mongodb_database.py)
     mongodb.init_app(app) # use the app.config MONGO_URI that was initialized above
 
+    sock.app = app
+    sock.init_app(app)
     
     # Register Blueprints 
     app.register_blueprint(ai_agent)
     app.register_blueprint(pincone_blueprint) 
     app.register_blueprint(aws_object_store)
+    
+    INCOMING_CALL_ROUTE = '/'
+    @app.route(INCOMING_CALL_ROUTE, methods=['GET', 'POST'])
+    def receive_call():
+        if request.method == 'POST':
+            xml = f"""
+                    <Response>
+                        <Say>
+                            Hi there! Welcome to Catalyst Labs, please wait 3 seconds while we connect to our AI agent.
+                        </Say>
+                        <Connect>
+                            <Stream url='wss://{request.host}/jeffrey_init' />
+                        </Connect>
+                    </Response>
+                    """.strip()
+
+            return Response(xml, mimetype='text/xml')
+        else:
+            return "Real-time phone call transcription app"
+    
+    
     
     # Home Route 
     @app.route('/api/v1/home', methods=['GET'])
@@ -66,3 +90,5 @@ def create_app(test_config: Dict[str ,str] = None) -> Flask:
         return jsonify({"message": "Welcome to Catalyst Labs API"}), 200
     
     return app
+
+
