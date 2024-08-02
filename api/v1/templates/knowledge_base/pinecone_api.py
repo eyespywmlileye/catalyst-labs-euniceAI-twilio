@@ -26,7 +26,9 @@ pincone_blueprint = Blueprint('pinecone',
                               __name__, 
                               url_prefix='/api/v1/pinecone')
 
-@pincone_blueprint.route('/rag_ai_agent', methods=['GET'])
+PINCONE_INDEX_NAME: str = "NerdmaAIReceptionist"
+
+@pincone_blueprint.route('/rag_ai_agent', methods=['POST'])
 def rag_ai_agent() -> None:
 
     query: str = request.get_json("query")
@@ -37,10 +39,7 @@ def rag_ai_agent() -> None:
         return jsonify({"message": "Query is required"}), HTTP_400_BAD_REQUEST
     
     embeddings: OpenAIEmbeddings = OpenAIEmbeddings()
-    mongodb_config: MongoDBConfig = MongoDBConfig()
-    
-    # Search Index name
-    index_name: str = mongodb_config.vector_search_index_name
+    index_name = PINCONE_INDEX_NAME
     
      
     vectorstore = PineconeVectorStore(index_name=index_name, 
@@ -69,10 +68,7 @@ def rag_ai_agent() -> None:
 def create_search_index() -> None:
     
     pc = Pinecone(api_key= os.getenv('PINECONE_API_KEY'))  
-    mongodb_config: MongoDBConfig = MongoDBConfig()
-    
-    # Search Index name
-    index_name: str = mongodb_config.vector_search_index_name
+    index_name = PINCONE_INDEX_NAME
 
     try: 
         existing_indexes: List[str] = [index_info["name"] for index_info in pc.list_indexes()]
@@ -91,7 +87,7 @@ def create_search_index() -> None:
         return index 
     
     except Exception as e:
-        logging.error(f"An error occurred while creating the search index: {e}")
+        print(f"An error occurred while creating the search index: {e}")
         return None
      
 @pincone_blueprint.route('/create_embeddings', methods=['POST'])
@@ -108,7 +104,7 @@ def create_embeddings(file_path: str,
     try: 
         documents = load_and_process_document(file_path)
     except Exception as e:
-        logging.error(f"An error occurred while loading and processing the document: {e}")
+        print(f"An error occurred while loading and processing the document: {e}")
         return None
     
     try: 
@@ -121,17 +117,14 @@ def create_embeddings(file_path: str,
         return docsearch
 
     except Exception as e:
-        logging.error(f"An error occurred while creating the embeddings: {e}")
+        print(f"An error occurred while creating the embeddings: {e}")
         return None
     
 @pincone_blueprint.route('/delete_search_index', methods=['DELETE'])
 def delete_search_index() -> Union[bool, None]:
   
     pc: Pinecone = Pinecone(api_key= os.getenv('PINECONE_API_KEY'))  
-    mongodb_config: MongoDBConfig = MongoDBConfig()
-    
-    # Search Index name
-    index_name: str = mongodb_config.vector_search_index_name
+    index_name = PINCONE_INDEX_NAME
 
     try: 
         existing_indexes: List[str] = [index_info["name"] for index_info in pc.list_indexes()]
@@ -144,5 +137,5 @@ def delete_search_index() -> Union[bool, None]:
         return True
      
     except Exception as e:
-        logging.error(f"An error occurred while deleting the search index: {e}")
+        print(f"An error occurred while deleting the search index: {e}")
         return None

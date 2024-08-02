@@ -9,8 +9,6 @@ langchain-pinecone
 PyAudio==0.2.14
 pymongo 
 Flask-PyMongo
-Flask
-Flask-jwt-extended
 pytz
 flask-cors
 python-dotenv
@@ -20,6 +18,10 @@ boto3
 pyyaml
 pinecone-client
 python-docx
-PyPDF2
+PyPDF2 
+flask-sock
+assemblyai
+python-dotenv
+ngrok
 twilio
-Flask-SocketIO
+gevent

@@ -1,3 +1,23 @@
+from flask import Flask, request, jsonify
+from pymongo import MongoClient
+from bson.json_util import dumps
+from threading import Thread
+import time
+import os 
+
+from dotenv import load_dotenv
+load_dotenv()
+
+app = Flask(__name__)
+
+stringg = "mongodb+srv://bot:SJMm1LUcA5voLeWN@cluster0.rxbs3g5.mongodb.net/"
+print(stringg)
+# MongoDB client setup
+client = MongoClient(stringg)
+db = client['ai_call_centre']
+collection = db['test']
+
+
 import os
 import requests
 from dotenv import load_dotenv
@@ -61,6 +81,34 @@ class TextToSpeech:
             player_process.stdin.close()
         player_process.wait()
         
-if __name__ == "__main__":
-    tts = TextToSpeech()
-    tts.speak("Hello, how are you today?")
+ 
+# Function to handle change stream
+def monitor_changes():
+    print("Starting to monitor changes...")
+    with collection.watch() as stream:
+        for change in stream:
+            print(change)
+            print(change.keys())
+            print("Change detected: %s", change)
+            TextToSpeech().speak(change['fullDocument']['text'])
+            
+            
+if __name__ == '__main__':
+    # Start the change stream monitoring in a separate thread
+    try:
+        thread = Thread(target=monitor_changes)
+        thread.start()
+        print("Thread started.")
+        
+        # Keep the main thread alive
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Interrupted by user.")
+    finally:
+        # Close the MongoDB client connection and clean up
+        print("Cleaning up...")
+        collection.delete_many({})
+        print("All documents deleted.")
+        thread.join()
+        print("Thread joined. Exiting.")
