@@ -4,8 +4,8 @@ from datetime import datetime
 import assemblyai as aai
 
 
-from api.v1.models.mongo_db import mongodb
-from api.v1.config.mongodb_config import MongoDBAtlas
+from api.models.mongo_db import mongodb
+from api.config.mongodb_config import MongoDBAtlas
 
 
 from dotenv import load_dotenv 

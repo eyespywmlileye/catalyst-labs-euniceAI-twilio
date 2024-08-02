@@ -6,11 +6,11 @@ import assemblyai as aai
 from flask_cors import CORS
 from flask import Flask, jsonify 
 
-from api.v1.models.mongo_db import mongodb
+from api.models.mongo_db import mongodb
 
-from api.v1.templates.ai_agent.ai_agent_api import ai_agent
-from api.v1.templates.knowledge_base.pinecone_api import pincone_blueprint
-from api.v1.templates.knowledge_base.object_store_api import aws_object_store
+from api.templates.ai_agent.ai_agent_api import ai_agent
+from api.templates.knowledge_base.pinecone_api import pincone_blueprint
+from api.templates.knowledge_base.object_store_api import aws_object_store
 
 from dotenv import load_dotenv
 load_dotenv()

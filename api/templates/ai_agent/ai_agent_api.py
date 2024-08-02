@@ -5,10 +5,10 @@ from datetime import datetime
 from flask_sock import Sock
 from flask import request, Response, Blueprint
 
-from api.v1.models.mongo_db import mongodb
-from api.v1.config.mongodb_config import MongoDBAtlas
+from api.models.mongo_db import mongodb
+from api.config.mongodb_config import MongoDBAtlas
 
-from api.v1.templates.ai_agent.speech_to_text import TwilioTranscriberClass
+from api.templates.ai_agent.speech_to_text import TwilioTranscriberClass
 
 from dotenv import load_dotenv
 

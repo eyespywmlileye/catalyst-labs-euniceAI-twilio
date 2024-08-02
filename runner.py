@@ -3,8 +3,8 @@ import os
 import ngrok 
 from twilio.rest import Client
 
-from __init__ import create_app
-from api.v1.templates.ai_agent.ai_agent_api import INCOMING_CALL_ROUTE
+from api_config.__init__ import create_app
+from api.templates.ai_agent.ai_agent_api import INCOMING_CALL_ROUTE
 
 from dotenv import load_dotenv
 load_dotenv()

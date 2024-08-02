@@ -3,7 +3,7 @@ import boto3
 from dotenv import load_dotenv
 from flask import Blueprint, jsonify
 
-from api.v1.contants.http_status_codes import *
+from api.contants.http_status_codes import *
 
 load_dotenv()
 

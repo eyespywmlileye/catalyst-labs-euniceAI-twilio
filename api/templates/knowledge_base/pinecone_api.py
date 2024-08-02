@@ -16,10 +16,9 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from api.v1.models.mongo_db import mongodb
-from api.v1.config.mongodb_config import MongoDBConfig
-from api.v1.templates.utils import load_and_process_document
-from api.v1.contants.http_status_codes import *
+ 
+from api.templates.utils import load_and_process_document
+from api.contants.http_status_codes import *
 load_dotenv()
 
 pincone_blueprint = Blueprint('pinecone', 
@@ -95,9 +94,7 @@ def create_embeddings(file_path: str,
                        chunk_size: Optional[int] = 1000, 
                        chunk_overlap: Optional[int] = 20)-> List[Document]:
     
-    mongodb_config: MongoDBConfig = MongoDBConfig()
-    index_name: str = mongodb_config.vector_search_index_name
-    
+    index_name = PINCONE_INDEX_NAME
     embeddings: OpenAIEmbeddings = OpenAIEmbeddings()
  
     # Load document
