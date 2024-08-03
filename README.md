@@ -9,8 +9,24 @@ Eunice AI is an AI customer service agent that is built to enbale small business
 ## Technical Overview 
 
 This enitre codebase was configured and deployed using AWS EC2 , running on an m5.large with Amazon Linux 2 . It used: 
-- **Nginx:** as a reverse proxy to handle traffic for both the **REST APIs** ad **Websockets** that we built, traffic is handles through port 80 (ideally we would self-sign an ssl certificate)
-- **Gunicorn:** We started and enabled a `websocket.service` systemd file to execute our flask application as soon as the network target is reached and keep it running and accessible
+- `Nginx`: Acts as a reverse proxy to handle traffic for both the **REST APIs** and **WebSockets** that we built. Traffic is handled through http port 80 (ideally, we would use a self-signed SSL certificate for secure connections).
+- `Gunicorn` : We started and enabled a websocket.service systemd file to execute our Flask application as soon as the network target is reached, ensuring it remains running and accessible. The file websocket.service file looks something like this:
+```
+[Unit]
+Description=Gunicorn daemon to run Cataylyst Lab RESTAPI and we socket 
+After=network.target 
+
+[Service]
+User=ec2-user
+Group=www-data
+WorkingDirectory=/home/ec2-user/Catalyst-Labs
+ExecStart=/bin/bash -c "source /home/ec2-user/anaconda3/etc/profile.d/conda.sh && conda activate py310  && exec gunicorn --worker-class gevent --bind unix:/home/ec2-user/Catalyst-Labs/websocket.sock --workers 3 --timeout 120 runner:app 
+Restart=always
+Environment="PATH=/home/ec2-user/anaconda3/envs/py310/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+[Install]
+WantedBy=multi-user.target
+```
 
 **NOTE:** Deployment to ec2 is a seperate matter that has a lot of naunces and configurations,if you  would like a guide to deploy this on your own ec2 instance, feel free to reach out ! 
 
