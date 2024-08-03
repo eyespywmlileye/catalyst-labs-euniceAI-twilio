@@ -120,6 +120,8 @@ ANTHROPIC_API_KEY = <key>
 python runner.py
 ```
 
+# Call the number 
+Once the server is up , you can now call the number and speak
 
 ## Contributing
 
