@@ -2,9 +2,11 @@
 
 ## Overview 
 
-This repo contains the implementation of Eunice AI that can spoken to through Twilio integration ! 
+This repo contains the implementation of Eunice AI that can spoken to through your phone ! 🍎 
 
 Eunice AI is an AI customer service agent that is built to enbale small businesses to have the power of information found in a website... telephonically, and the best part is that they do not have to worry about answering calls, Eunice does that ! 
+
+This repo shows the implementation to get Eunice working with Twilio so that you can access it when calling the phone number of your choice.
 
 ## Technical Overview 
 
