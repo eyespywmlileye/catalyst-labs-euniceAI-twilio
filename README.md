@@ -2,7 +2,7 @@
 
 ## Overview 
 
-This repo contains the implementation of Eunice AI that can spoken to through your phone ! 🍎 
+This repo contains the implementation of Eunice AI that can spoken to through your phone ... just dial the number! 🍎 
 
 Eunice AI is an AI customer service agent that is built to enbale small businesses to have the power of information found in a website... telephonically, and the best part is that they do not have to worry about answering calls, Eunice does that ! 
 
