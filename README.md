@@ -13,7 +13,7 @@ This enitre codebase was configured and deployed using AWS EC2 , running on an m
 - `Gunicorn` : We started and enabled a websocket.service systemd file to execute our Flask application as soon as the network target is reached, ensuring it remains running and accessible. The file websocket.service file looks something like this:
 ```
 [Unit]
-Description=Gunicorn daemon to run Cataylyst Lab RESTAPI and we socket 
+Description=Gunicorn daemon to run Cataylyst Lab's REST Apis and Webockets 
 After=network.target 
 
 [Service]
